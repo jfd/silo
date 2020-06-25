@@ -1,0 +1,16 @@
+{
+    "name": "silo",
+    "version": "0.0.1",
+    "bin": {
+        "silo3": "./index.mjs"
+    },
+    "files": [
+        "scripts",
+        "src"
+    ],
+    "directories.bin": {
+        "scripts": "./scripts"
+    },
+    "main": "index.mjs",
+    "engines" : { "node" : ">=14.4.0" }
+}
