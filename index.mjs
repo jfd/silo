@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-//#!/usr/bin/env node --experimental-loader ./loader.mjs
 import ChildProcess from "child_process";
 import Path from "path";
 import Url from "url";
