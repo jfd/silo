@@ -8,6 +8,7 @@ usage: silo [--version] [--help] [--config=<path>] [--work-dir=<path>]
 
 Built-in commands:
     exec        Run specificed path in an isolated process
+    test        Run project tests
 
 See 'silo help <command>' for more information on a specific command.
 `;
