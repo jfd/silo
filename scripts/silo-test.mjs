@@ -106,7 +106,13 @@ function handleTestEnd(metrics, path, name, status, error) {
         break;
 
     case "setup":
-        console.log(`Running test for \x1B[1m${moduleName}\x1B[22m (${path})`);
+        if (!error) {
+            console.log(`Running test for \x1B[1m${moduleName}\x1B[22m (${path})`);
+        }
+
+        console.log(`Unable to run test for \x1B[1m${moduleName}\x1B[22m (${path}), due to a setup error`);
+        metrics.failures++;
+        printErrorStack(error);
         break;
 
     case "teardown":
