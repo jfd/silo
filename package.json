@@ -8,9 +8,14 @@
         "scripts",
         "src"
     ],
+    "dependencies": {
+        "rollup": "2.33.3"
+    },
     "directories.bin": {
         "scripts": "./scripts"
     },
     "main": "index.mjs",
-    "engines" : { "node" : ">=14.4.0" }
+    "engines": {
+        "node": ">=14.4.0"
+    }
 }
