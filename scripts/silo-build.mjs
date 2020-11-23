@@ -1,5 +1,6 @@
 import ChildProcess from "child_process";
 
+import {List} from "//es.parts/ess/0.0.1/";
 import {Path} from "//es.parts/ess/0.0.1/";
 import {Str} from "//es.parts/ess/0.0.1/";
 import {Url} from "//es.parts/ess/0.0.1/";
@@ -12,6 +13,8 @@ Usage:
 
 Options:
     -h, --help               Print this message
+        --format=FORMAT      Output format, default: cjs
+        --output-path=PATH   Output path, default: "./dist/app.js"
 `;
 
 export default function(argv) {
@@ -25,7 +28,10 @@ export default function(argv) {
         inputPath = Path.resolve(process.cwd(), "index.mjs");
     }
 
-    return internalExec(inputPath, "dist/bundle.js", "iife");
+    const outputPath = opts["--output-path"] || "dist/app.js";
+    const format = opts["--format"] || "cjs";
+
+    return internalExec(inputPath, outputPath, format);
 }
 
 // Internals
@@ -36,7 +42,7 @@ async function internalExec(inputPath, outputPath, format) {
     const rollupPath = Path.resolve(rootdir, "./node_modules/rollup/dist/bin/rollup");
     const loaderPath = Path.resolve(rootdir, "./src/RollupModuleLoader.js");
 
-    const args = [
+    let args = [
         rollupPath,
         inputPath,
         `--file ${outputPath}`,
@@ -44,19 +50,16 @@ async function internalExec(inputPath, outputPath, format) {
         `--plugin ${loaderPath}`
     ];
 
+    if (format === "cjs") {
+        args = List.append(args, `--outro "${outroLauncher().split("\n").join(" ")}"`);
+    }
+
     try {
         const result = await promiseExec(Str.join(args, " "));
         console.log(result);
     } catch (error) {
         console.error(error);
     }
-
-    console.log("all done!");
-    // const nodePath = `${process.execPath} ----experimental-loader ${loaderPath}`;
-
-    // rollup packages/pdbackend/index.mjs --file dist/bundle.js --format iife --plugin ./rollup-plugin-silo.js
-
-    // throw new Error(`internalExec(${execPath}) - NOT IMPLEMENTED`);
 }
 
 function promiseExec(cmd) {
@@ -67,8 +70,23 @@ function promiseExec(cmd) {
             }
 
             resolve(stdout);
-            // console.log(`stdout: ${stdout}`);
-            // console.error(`stderr: ${stderr}`);
         });
     });
+}
+
+function outroLauncher() {
+    return `
+        (async function() {
+            try {
+                await module.exports(process.argv.slice(2));
+            } catch (error) {
+                if (error.appMessage) {
+                    console.error(error.appMessage);
+                    return process.exit(error.appExitCode || 1);
+                }
+                console.log(error);
+                return process.exit(1);
+            }
+        })();
+    `;
 }
