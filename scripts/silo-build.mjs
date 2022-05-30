@@ -1,11 +1,11 @@
 import ChildProcess from "child_process";
 
-import {List} from "//es.parts/ess/0.0.1/";
-import {Path} from "//es.parts/ess/0.0.1/";
-import {Str} from "//es.parts/ess/0.0.1/";
-import {Url} from "//es.parts/ess/0.0.1/";
+import * as List from "../src/List.mjs";
+import * as Path from "../src/Path.mjs";
+import * as Str from "../src/Str.mjs";
+import * as Url from "../src/Url.mjs";
 
-import {Docopt} from "//es.parts/docopt/0.0.1/";
+import * as Docopt from "../src/Docopt.mjs";
 
 const USAGE = `
 Usage:
@@ -66,6 +66,9 @@ function promiseExec(cmd) {
     return new Promise((resolve, reject) => {
         ChildProcess.exec(cmd, (error, stdout, stderr) => {
             if (error) {
+                console.log(">>>>>>>>>>>>> STDOUT");
+                console.log(stdout);
+                console.log("<<<<<<<<<<<<< STDOUT");
                 return reject(error);
             }
 

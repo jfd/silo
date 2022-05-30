@@ -1,6 +1,5 @@
-import {Path} from "//es.parts/ess/0.0.1/";
-
-import {Docopt} from "//es.parts/docopt/0.0.1/";
+import * as Docopt from "../src/Docopt.mjs";
+import * as Path from "../src/Path.mjs";
 
 const USAGE = `
 Usage:

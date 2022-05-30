@@ -2,7 +2,7 @@
     "name": "silo",
     "version": "0.0.1",
     "bin": {
-        "silo3": "./index.mjs"
+        "silo": "./index.mjs"
     },
     "files": [
         "scripts",

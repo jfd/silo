@@ -1,10 +1,9 @@
-import {Dict} from "//es.parts/ess/0.0.1/";
-import {List} from "//es.parts/ess/0.0.1/";
-import {Path} from "//es.parts/ess/0.0.1/";
-import {Str} from "//es.parts/ess/0.0.1/";
-
-import {Docopt} from "//es.parts/docopt/0.0.1/";
-import {Glob} from "//es.parts/glob/0.0.1/";
+import * as Dict from "../src/Dict.mjs";
+import * as Docopt from "../src/Docopt.mjs";
+import * as Glob from "../src/Glob.mjs";
+import * as List from "../src/List.mjs";
+import * as Path from "../src/Path.mjs";
+import * as Str from "../src/Str.mjs";
 
 const USAGE = `
 Usage: silo-test [options] [<pattern>]
@@ -65,6 +64,11 @@ export default async (argv) => {
     await testModules(workdir, paths, reporter, filter);
 
     console.log(formatResult(metrics));
+
+    if (metrics.failures > 0) {
+        console.error("Exiting with error code");
+        return process.exit(1);
+    }
 }
 
 // Callbacks
@@ -157,7 +161,7 @@ async function testModule(path, reporter, filter) {
         exports = await import(path);
     } catch (error) {
         console.error(`Unable to load ${path}, reason: ${error.message}`);
-        return;
+        return process.exit(1);
     }
 
     const tests = gatherTestsByFilter(exports, filter);

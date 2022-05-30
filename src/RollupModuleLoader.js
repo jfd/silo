@@ -29,15 +29,6 @@ module.exports = function silo () {
             }
 
             return null;
-            //
-            // const specifier3 = resolveUrlWithRewriteRules(specifier2);
-            //
-            //
-            // if (source === 'virtual-module') {
-            //     return source; // this signals that rollup should not ask other plugins or check the file system to find this id
-            // }
-            //
-            // return null;
         }
 
     };
@@ -107,7 +98,7 @@ function resolveUrlWithRewriteRules(specifier) {
             return a;
         }
 
-        const result = specifier2.replace(rule.regexp, `/${rule.path}`);
+        const result = specifier2.replace(rule.regexp, `${rule.path}`);
 
         if (process.env["SILO_DEBUG"]) {
             console.log(`Rewritting url for "${specifier}" to ${result}`);

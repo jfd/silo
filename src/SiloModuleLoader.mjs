@@ -61,13 +61,16 @@ function getFormat(url, context, defaultGetFormat) {
 }
 
 async function getSource(url, context, defaultGetSource) {
+    if (process.env["SILO_DEBUG"]) {
+        console.log(`Get Source for "${url}"...`);
+    }
+
     // For JavaScript to be loaded over the network, we need to fetch and
     // return it.
-
     if (url.startsWith('https://')) {
       return new Promise((resolve, reject) => {
           if (process.env["SILO_DEBUG"]) {
-              console.log(`Load url: ${url}`);
+              console.log(`Loading external URL: ${url}...`);
           }
 
           Https.get(url, (res) => {
@@ -77,6 +80,10 @@ async function getSource(url, context, defaultGetSource) {
                   resolve({ source: data })
               });
           }).on('error', (err) => {
+              if (process.env["SILO_DEBUG"]) {
+                  console.log(`Error loading External URL: ${url}...`);
+              }
+
               return reject(err);
           });
     });
@@ -100,11 +107,19 @@ function initEnv() {
 function readDotEnv() {
     let path = process.cwd();
 
+    if (process.env["SILO_DEBUG"]) {
+        console.log(`Search for ".env" in directory hierarchy...`);
+    }
+
     do {
         const filepath = Path.join(path, ".env");
 
         if (Fs.existsSync(filepath) === false) {
             continue;
+        }
+
+        if (process.env["SILO_DEBUG"]) {
+            console.log(`Loading ".env"-source at ${filepath}...`);
         }
 
         const content = Fs.readFileSync(filepath, "utf8");

@@ -1,6 +1,6 @@
-import {Str} from "//es.parts/ess/0.0.1/";
-import {List} from "//es.parts/ess/0.0.1/";
-import {Path} from "//es.parts/ess/0.0.1/";
+import * as Str from "./Str.mjs";
+import * as List from "./List.mjs";
+import * as Path from "./Path.mjs";
 
 const USAGE = `
 usage: silo [--version] [--help] [--config=<path>] [--work-dir=<path>]
