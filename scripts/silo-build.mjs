@@ -59,6 +59,7 @@ async function internalExec(inputPath, outputPath, format) {
         console.log(result);
     } catch (error) {
         console.error(error);
+        return process.exit(1);
     }
 }
 
