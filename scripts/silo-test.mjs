@@ -83,6 +83,7 @@ function handleTestBegin(metrics, path, name) {
 
     metrics.total++;
     metrics.state[`${path}:${name}`] = {
+        success: false,
         time: getTime(),
         spinner: createSpinner(text.substr(0, text.length - 1)),
     };
@@ -97,6 +98,7 @@ function handleTestEnd(metrics, path, name, status, error) {
         destroySpinner(state.spinner);
         if (error === null) {
             metrics.success++;
+            state.success = true;
             const t = getTime(state.time);
             const elapsed = (t[0] * 1000) + (t[1] / 1000000);
             const fixed = elapsed.toFixed(2);
@@ -275,7 +277,17 @@ function formatLine(module, name, status) {
 
 function formatResult(metrics) {
     const {total, success, failures} = metrics;
-    return `Total ${total}, success ${success}, failures ${failures}`;
+    let failed=[];
+
+    for (const ms in metrics.state) {
+        if (metrics.state[ms].success === false) {
+            failed = List.append(failed, List.last(ms.split("/")).split(":"));
+        }
+    }
+
+    return List.len(failed) === 0
+        ? `Total ${total}, success ${success}, failures ${failures}`
+        : `Total ${total}, success ${success}, failures ${failures}, \nFailed tests:\n${List.map(failed, f => `\t${f[0]}:\x1B[1m${f[1]}\x1B[0m`)}`;
 }
 
 function getTime(time) {
