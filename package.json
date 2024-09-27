@@ -9,7 +9,7 @@
         "src"
     ],
     "dependencies": {
-        "rollup": "2.33.3"
+        "rollup": "2.79.2"
     },
     "directories.bin": {
         "scripts": "./scripts"
